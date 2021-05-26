@@ -83,6 +83,7 @@ def traceback_helper(i, j, mat, rna):
     while j>i:
       if mat[i][j] == mat[i][j-1]:
         j = j - 1
+        print("IF")
       else:
         for k in range(i, j):
           if (score(rna[k],rna[j]) == 1):
@@ -91,6 +92,8 @@ def traceback_helper(i, j, mat, rna):
                 P1 = traceback_helper(i, k -1, mat, rna)
                 P2 = traceback_helper(k+1, j-1, mat, rna)
                 P = P + P1 + P2
+        print("ELSE")
+        return P
   return P
 
 def main():
