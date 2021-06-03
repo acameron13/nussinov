@@ -96,12 +96,48 @@ def traceback_helper(i, j, mat, rna):
         return P
   return P
 
+def layla_traceback(opt_score, rna):
+   n = len(opt_score) - 1
+   stack = [] #temporary working stack
+   visited = [] #stores the base pairs that should be matched
+   stack.append([0,n]) #start at upper right corner
+   while len(stack) > 0:
+      current = stack.pop()
+      i = current[0]
+      j = current[1]
+      print("I and J: " , (i,j))
+      print("Current: " , opt_score[i][j])
+      print("Score: " , score(rna[i],rna[j]))
+      print("Down Example: " , opt_score[i+1][j])
+      print("Left Example: " , opt_score[i][j-1])
+      print("Diagonal Example: " , opt_score[i+1][j-1])
+      if i >= j:
+         continue
+      elif opt_score[i+1][j] == opt_score[i][j]: #down one row
+         stack.append([i+1, j])
+         print("here_1")
+      elif opt_score[i][j-1] == opt_score[i][j]: #left one column
+         stack.append([i, j-1])
+         print("here_2")
+      elif (opt_score[i+1][j-1] + score(rna[i],rna[j])) == opt_score[i][j]: #left and down diagonal
+         visited.append([i,j]) #save base pair
+         stack.append([i+1,j-1])
+         print("there")
+      else:
+         print("here_3")
+         for k in range(i+1,j):
+            if (opt_score[i][k] + opt_score[k+1][j]) == opt_score[i][j]:
+               stack.append([k+1, j])
+               stack.append([i, k])
+               break
+   return visited
+
 def main():
   rna = read_input("input.txt")
   opt_score = create_matrix(len(rna))
   opt_score = populate_matrix(opt_score, rna)
   print_matrix(opt_score)
-  our_pairs = traceback(opt_score, rna)
+  our_pairs = layla_traceback(opt_score, rna)
   print(our_pairs)
 
 main()
