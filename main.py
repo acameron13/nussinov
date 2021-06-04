@@ -70,33 +70,8 @@ def score(base1, base2):
     else:
         return 0
 
-#traceback to fill pair list
-def traceback(mat, rna):
-  i = 0
-  j = len(mat) - 1
-  P = traceback_helper(i, j, mat, rna)
-  return P
-
-def traceback_helper(i, j, mat, rna):
-  P = []
-  if (i > -1):
-    while j>i:
-      if mat[i][j] == mat[i][j-1]:
-        j = j - 1
-        print("IF")
-      else:
-        for k in range(i, j):
-          if (score(rna[k],rna[j]) == 1):
-            if (mat[i][j] == mat[i][k-1] + mat[k+1][j-1] +1):
-                P.append([k,j])
-                P1 = traceback_helper(i, k -1, mat, rna)
-                P2 = traceback_helper(k+1, j-1, mat, rna)
-                P = P + P1 + P2
-        print("ELSE")
-        return P
-  return P
-
-def layla_traceback(opt_score, rna):
+#Go back through the matrix to identify base pairs
+def traceback(opt_score, rna):
    n = len(opt_score) - 1
    stack = [] #temporary working stack
    visited = [] #stores the base pairs that should be matched
@@ -137,7 +112,7 @@ def main():
   opt_score = create_matrix(len(rna))
   opt_score = populate_matrix(opt_score, rna)
   print_matrix(opt_score)
-  our_pairs = layla_traceback(opt_score, rna)
+  our_pairs = traceback(opt_score, rna)
   print(our_pairs)
 
 main()
